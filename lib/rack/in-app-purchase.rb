@@ -43,7 +43,7 @@ module Rack
 
       begin
         receipt = Venice::Receipt.verify!(params[:'receipt-data'])
-        latest = receipt.latest_in_app_receipt
+        latest = receipt.in_app.sort {|a,b| a.transaction_id.to_i <=> b.transaction_id.to_i }.last
         Receipt.create({ip_address: request.ip}.merge(latest.to_h))
 
         content = settings.content_callback.call(receipt) rescue nil

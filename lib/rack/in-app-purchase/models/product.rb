@@ -3,7 +3,7 @@ module Rack
     class Product < Sequel::Model
       TYPES = ["Consumable", "Non-Consumable", "Free Subscription", "Auto-Renewable Subscription", "Non-Renewable Subscription"]
 
-      plugin :json_serializer, naked: true, except: :id 
+      plugin :json_serializer, naked: true, except: :id
       plugin :validation_helpers
       plugin :timestamps, force: true, update_on_create: true
       

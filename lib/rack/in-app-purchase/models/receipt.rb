@@ -1,7 +1,7 @@
 module Rack
-  class InAppPurchase  
+  class InAppPurchase
     class Receipt < Sequel::Model
-      plugin :json_serializer, naked: true, except: :id 
+      plugin :json_serializer, naked: true, except: :id
       plugin :validation_helpers
       plugin :timestamps, force: true
       
@@ -15,6 +15,12 @@ module Rack
         validates_presence [:product_id, :transaction_id, :purchase_date]
         validates_unique :transaction_id
       end
+      
+      def latest_in_app_receipt
+        self.in_app.sort! {|a,b| a.transaction_id.to_i <=> b.transaction_id.to_i }
+        self.in_app.last
+      end
+      
     end
   end
 end

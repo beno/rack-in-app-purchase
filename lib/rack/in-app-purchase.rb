@@ -43,14 +43,14 @@ module Rack
 
       begin
         receipt = Venice::Receipt.verify!(params[:'receipt-data'])
-
-        Receipt.create({ip_address: request.ip}.merge(receipt.to_h))
+        latest = receipt.latest_in_app_receipt
+        Receipt.create({ip_address: request.ip}.merge(latest.to_h))
 
         content = settings.content_callback.call(receipt) rescue nil
 
         {
           status: 0,
-          receipt: receipt.to_h,
+          receipt: latest.to_h,
           content: content
         }.select{|k,v| v}.to_json
       rescue Venice::Receipt::VerificationError => error
